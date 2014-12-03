@@ -1,0 +1,5 @@
+Make sure to put
+
+ runtime vimrc
+
+ into the .vimrc in home dir.
