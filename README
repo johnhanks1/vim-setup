@@ -1,5 +1,9 @@
-Make sure to put
+Setup:
+Clone the repo into .vim 
+Symlink the .vimrc
+   ln -s ~/.vim/.vimrc ~/.vimrc 
+Open vim and run 
+   PluginInstall 
+ or run from the command line
+   vim +PluginInstall +qall
 
- runtime vimrc
-
- into the .vimrc in home dir.
