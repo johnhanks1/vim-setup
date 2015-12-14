@@ -25,6 +25,7 @@ Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-haml'
 Plugin 'tpope/vim-endwise'
+Plugin 'derekwyatt/vim-scala'
 
 "color scheme
 Plugin 'michalbachowski/vim-wombat256mod'
