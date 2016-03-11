@@ -26,6 +26,8 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-haml'
 Plugin 'tpope/vim-endwise'
 Plugin 'derekwyatt/vim-scala'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'fatih/vim-go'
 
 "color scheme
 Plugin 'michalbachowski/vim-wombat256mod'
@@ -71,6 +73,9 @@ set showmatch
 set comments=sl:/*,mb:\ *,elx:\ */
 set scrolloff=3 " Keep 3 lines below and above the cursor
 
+" copy to the clipboard
+set clipboard=unnamed
+
 colorscheme wombat256mod
 syntax enable
 
@@ -88,6 +93,22 @@ map <F9> :!./a.out<CR>
 " Maximize and Minimize Split
 map ,<C-J> :res 1<CR>:wincmd p<CR>
 map ,<C-K> <C-W>_<C-W>\|<CR>
+
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+
+" Spell-check Markdown files
+autocmd FileType markdown setlocal spell
+
+" Spell-check Git messages
+autocmd FileType gitcommit setlocal spell
+
+" Set spellfile to location that is guaranteed to exist,
+" can be symlinked to Dropbox or kept in Git
+" and managed outside of thoughtbot/dotfiles using rcm.
+set spellfile=$HOME/.vim-spell-en.utf-8.add
+
+" Autocomplete with dictionary words when spell check is on
+set complete+=kspell
 
 "Keyboard Mappings
 "File Explorer
