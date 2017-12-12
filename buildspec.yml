@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - sudo apt-get update && sudo apt-get install vim
+      - sudo apt-get update && sudo apt-get install vim -y
   build:
     commands:
        - vim +PluginInstall +qall
