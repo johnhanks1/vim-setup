@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - sudo apt-get update && sudo apt-get install vim
+  build:
+    commands:
+       - vim +PluginInstall +qall
+#artifacts:
+  #files:
+    # - location
+    # - location
+  #discard-paths: yes
+  #base-directory: location
