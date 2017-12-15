@@ -3,22 +3,17 @@
 Setup:
 
 Clone the repo into .vim
-
-   git clone https://github.com/johnhanks1/vim-setup.git .vim 
+* `git clone https://github.com/johnhanks1/vim-setup.git .vim`
 
 Clone Vundle into .vim 
+* `git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim`
 
-   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-
-Symlink the .vimrc
-   
-   ln -s ~/.vim/.vimrc ~/.vimrc 
+Symlink the .vimrc  
+* `ln -s ~/.vim/.vimrc ~/.vimrc` 
 
 Open vim and run 
+* `PluginInstall`
 
-   PluginInstall 
- 
- or run from the command line
- 
-   vim +PluginInstall +qall
+ or run from the command line 
+* `vim +PluginInstall +qall`
 
