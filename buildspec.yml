@@ -1,5 +1,14 @@
 version: 0.2
 
+batch:
+  build-matrix:
+    dynamic:
+      env:
+        compute-type:
+          - BUILD_GENERAL1_SMALL
+          - BUILD_GENERAL1_MEDIUM
+          - BUILD_GENERAL1_LARGE
+
 phases:
   install:
     commands:
