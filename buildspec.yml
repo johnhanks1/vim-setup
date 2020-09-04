@@ -1,12 +1,11 @@
 version: 0.2
 
 batch:
-  build-matrix:
-    dynamic:
+  build-list:
+    - buildspec: "buildspec-2.yml"
+      identifier: connector
       env:
-        compute-type:
-          - BUILD_GENERAL1_SMALL
-          - BUILD_GENERAL1_MEDIUM
+        compute-type: BUILD_GENERAL1_SMALL
 
 phases:
   install:
@@ -16,9 +15,3 @@ phases:
   build:
     commands:
        - vim +PluginInstall +qall
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #discard-paths: yes
-  #base-directory: location
