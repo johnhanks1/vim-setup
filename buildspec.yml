@@ -2,11 +2,10 @@ version: 0.2
 
 batch:
   build-list:
-    - identifier: linux_small
-      buildspec: dir/buildspec-2.yml
-      env:
-        compute-type: BUILD_GENERAL1_SMALL
-
+    - buildspec: dir/buildspec-2.yml
+      identifier: dirspec
+    - buildspec: buildspec-2.yml
+      identifier: spec
 phases:
   install:
     commands:
