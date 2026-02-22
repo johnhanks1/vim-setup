@@ -42,11 +42,11 @@ echo "[teampowers] Setting up Claude Code plugin..."
 if command -v claude &>/dev/null; then
     echo "[teampowers] Claude Code CLI found"
     echo "[teampowers] To install teampowers as a plugin, run:"
-    echo "  claude plugin install $SCRIPT_DIR/teampowers"
+    echo "  claude plugin install $SCRIPT_DIR/plugins/teampowers"
 else
     echo "[teampowers] Claude Code CLI not found"
     echo "[teampowers] Install Claude Code first, then run:"
-    echo "  claude plugin install $SCRIPT_DIR/teampowers"
+    echo "  claude plugin install $SCRIPT_DIR/plugins/teampowers"
 fi
 
 echo ""

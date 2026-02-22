@@ -8,9 +8,13 @@ Personal dev environment: Vim configuration and **teampowers**, a Claude Code ag
 vim/
   .vimrc                        Vim configuration (Vundle, plugins, keybindings)
 
-teampowers/
-  .claude-plugin/plugin.json    Plugin manifest
-  skills/
+.claude-plugin/
+  marketplace.json              Plugin marketplace manifest
+
+plugins/
+  teampowers/
+    .claude-plugin/plugin.json  Plugin manifest
+    skills/
     using-teampowers/           Entry point — how the framework works
     communication-mesh/         Agent-to-agent messaging network topology
     team-driven-development/    Full team pipeline orchestration
@@ -74,7 +78,7 @@ CI runs pipeline → CI reports to Lead (and Dev on failure)
 ### Install as Claude Code plugin
 
 ```bash
-claude plugin install /path/to/vim-setup/teampowers
+claude plugin install /path/to/vim-setup/plugins/teampowers
 ```
 
 ## Vim Setup

@@ -1,0 +1,34 @@
+{
+  "name": "vim-setup",
+  "owner": {
+    "name": "John Hanks"
+  },
+  "metadata": {
+    "description": "Vim configuration and Claude Code agent skills plugins",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "teampowers",
+      "source": "./plugins/teampowers",
+      "description": "Agent Teams-powered skills framework for Claude Code: parallel team execution, TDD, debugging, and collaborative development",
+      "version": "0.1.0",
+      "author": {
+        "name": "John Hanks"
+      },
+      "homepage": "https://github.com/johnhanks1/vim-setup",
+      "repository": "https://github.com/johnhanks1/vim-setup",
+      "license": "MIT",
+      "keywords": [
+        "skills",
+        "agent-teams",
+        "tdd",
+        "debugging",
+        "collaboration",
+        "parallel-execution",
+        "workflows"
+      ]
+    }
+  ]
+}
