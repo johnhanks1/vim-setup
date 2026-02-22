@@ -19,8 +19,11 @@ Claude Code has native worktree support. Use it to give each dev agent a fully i
 claude --worktree feature-auth
 claude -w feature-auth
 
-# Auto-named worktree
+# Auto-named worktree (random name like "bright-running-fox")
 claude --worktree
+
+# Launch in its own tmux session — great for running multiple parallel agents
+claude --worktree feature-auth --tmux
 ```
 
 Worktrees are created at `<repo>/.claude/worktrees/<name>/` and branch from the default remote branch as `worktree-<name>`.
@@ -85,6 +88,16 @@ After a dev agent completes and CI passes:
 git merge worktree-dev-task-3
 git worktree remove .claude/worktrees/dev-task-3
 ```
+
+## Setup
+
+Add `.claude/worktrees/` to your `.gitignore` to prevent worktree contents from appearing as untracked files:
+
+```bash
+echo '.claude/worktrees/' >> .gitignore
+```
+
+Each new worktree needs its dev environment initialized (e.g., `npm install`, virtualenv setup). Consider adding a setup script that runs automatically.
 
 ## Rules
 
