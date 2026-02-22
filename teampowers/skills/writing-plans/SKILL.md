@@ -44,9 +44,9 @@ Announce: "I'm using the writing-plans skill to create an implementation plan."
 - If tasks must be sequential, explicitly mark dependencies
 
 ### File Ownership
-- Each task should have a clear set of files it owns
-- Minimize overlap — if two tasks need the same file, make one depend on the other
-- This prevents merge conflicts during parallel team execution
+- Each task should list the files it will create/modify
+- With worktree isolation (preferred): file overlap between tasks is fine — each dev gets its own worktree, so no conflicts. Lead merges worktree branches after completion
+- Without worktree isolation: minimize overlap — if two tasks need the same file, make one depend on the other to prevent merge conflicts
 
 ### Acceptance Criteria
 - Every task must have testable acceptance criteria
@@ -75,3 +75,4 @@ Before execution, review the plan with the human:
 - **teampowers:brainstorming** — Design decisions feed into plan creation
 - **teampowers:executing-plans** — Plans are executed by this skill
 - **teampowers:team-driven-development** — Independent tasks executed in parallel by teams
+- **teampowers:using-git-worktrees** — With worktree isolation, tasks with overlapping files can still run in parallel

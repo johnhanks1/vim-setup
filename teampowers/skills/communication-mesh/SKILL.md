@@ -23,6 +23,14 @@ Teampowers agents communicate in a mesh network. Agents talk directly to each ot
 - **Reviewer** — single source of truth for code quality
 - **CI** — single source of truth for pipeline status
 
+## Worktree Awareness
+
+With native worktree isolation, dev agents each work in their own worktree (`<repo>/.claude/worktrees/dev-{task_id}/`). This affects communication:
+- **Scouts** explore the main worktree and send context to devs (who are in separate worktrees)
+- **Devs** commit to their worktree branch; completion signals include the worktree branch name
+- **Tester/Reviewer/CI** work in the main worktree and test against merged results
+- **Lead** coordinates merges of worktree branches into the feature branch between batches
+
 ## The Mesh
 
 ### Communication Map
@@ -164,6 +172,8 @@ DEPENDENCIES: {what depends on what}
 ```
 TASK: {task_id}
 STATUS: implementation complete
+WORKTREE: {worktree path, e.g. .claude/worktrees/dev-task-3/}
+WORKTREE_BRANCH: {branch name, e.g. worktree-dev-task-3}
 CHANGED_FILES: {list}
 SUMMARY: {what was built}
 TESTS_RUN: {results}
@@ -186,6 +196,15 @@ TASK: {task_id}
 STATUS: review approved
 COMMIT_RANGE: {base_sha}..{head_sha}
 CHECKS: run all
+```
+
+### Merge Request (CI → Lead, after task passes all checks)
+```
+TASK: {task_id}
+STATUS: ready to merge
+WORKTREE_BRANCH: {branch name}
+CI_STATUS: all checks passed
+MERGE_INTO: {feature branch name}
 ```
 
 ### Failure Feedback (Tester/Reviewer/CI → Dev)

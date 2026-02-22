@@ -58,20 +58,24 @@ Have a plan? → Non-trivial?
 
 ## The Process
 
-### Step 1: Create the Team
+### Step 1: Create the Team with Worktree Isolation
 
-Based on the plan, determine team size:
+Based on the plan, determine team size and isolation strategy:
 
 ```
 TeamCreate:
-  lead:     1  (always)
-  scout:    N  (1 per codebase area in the plan)
-  dev:      N  (1 per independent task in first batch)
-  tester:   1  (always)
-  reviewer: 1  (always)
-  ci:       1  (always)
-  ad-hoc:   as needed (based on task domains)
+  lead:     1  (always, main worktree)
+  scout:    N  (1 per codebase area, main worktree — read-only)
+  dev:      N  (1 per independent task, isolation: worktree — each gets its own)
+  tester:   1  (always, main worktree)
+  reviewer: 1  (always, main worktree)
+  ci:       1  (always, main worktree)
+  ad-hoc:   as needed (isolation: worktree if writing code)
 ```
+
+**Worktree setup**: Dev agents MUST specify `isolation: worktree` in their frontmatter. This gives each dev a fully isolated working directory — no file ownership conflicts, no coordination overhead. See `teampowers:using-git-worktrees` for details.
+
+Scouts, tester, reviewer, and CI share the main worktree since they don't have conflicting writes.
 
 ### Step 2: Scout Phase
 
@@ -110,15 +114,23 @@ Failures route back to dev directly:
 
 Dev fixes and resubmits through the pipeline. The loop is tight — no lead relay needed.
 
-### Step 5: Checkpoint
+### Step 5: Merge Worktrees
 
-After each batch completes (all tasks green through CI):
+After all tasks in a batch pass CI:
+1. Lead merges each dev's worktree branch into the feature branch
+2. CI runs the full pipeline on the merged feature branch
+3. If merge conflicts arise, lead resolves or assigns a dev to fix
+4. Clean up completed worktrees
+
+### Step 6: Checkpoint
+
+After merge and final CI pass:
 1. Lead reports to human: what was built, test results, CI status
 2. Human reviews and provides feedback
 3. Lead adjusts plan, scales team up/down for next batch
 4. Next batch dispatched
 
-### Step 6: Completion
+### Step 7: Completion
 
 After all tasks:
 1. CI runs final comprehensive pipeline
@@ -137,9 +149,19 @@ After all tasks:
 - **Failures route directly to dev** — tight feedback loops
 - **Always checkpoint with human** between batches
 
-## File Ownership Protocol
+## Isolation Strategy
 
-When multiple tasks touch the same codebase:
+### Default: Worktree Isolation (Preferred)
+
+Each dev agent runs in its own worktree via `isolation: worktree`. This eliminates file ownership conflicts entirely:
+1. Each dev works in `<repo>/.claude/worktrees/<dev-task-name>/`
+2. Devs can freely modify any file in their worktree without coordination
+3. After completion and CI pass, lead merges the worktree branch into the feature branch
+4. Other devs rebase if they depend on merged work
+
+### Fallback: File Ownership (When Worktrees Unavailable)
+
+If worktree isolation is not available:
 1. Scout recommends file ownership per task
 2. Lead assigns each task a set of owned files
 3. If two tasks need the same file, make one dependent on the other

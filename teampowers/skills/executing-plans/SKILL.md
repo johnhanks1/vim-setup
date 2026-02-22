@@ -19,11 +19,21 @@ Announce: "I'm using the executing-plans skill to implement this plan."
 - Raise concerns with your human partner before starting
 - If no concerns, create a `TodoWrite` tracking all tasks and proceed
 
-### Step 2: Scout
+### Step 2: Set Up Worktree
+
+Create an isolated worktree for this execution session:
+
+```bash
+claude --worktree plan-execution
+```
+
+Or if using the team pipeline, dev agents will each get their own worktree via `isolation: worktree`. See `teampowers:using-git-worktrees`.
+
+### Step 3: Scout
 
 Activate `teampowers:scout` to explore the codebase and deliver context.
 
-### Step 3: Execute Batch
+### Step 4: Execute Batch
 
 Default batch size: 3 tasks. Independent tasks run in parallel through the team pipeline.
 
@@ -34,7 +44,7 @@ For each task in the batch:
 
 For parallel execution, see `teampowers:team-driven-development` for the full team orchestration pattern.
 
-### Step 4: Report
+### Step 5: Report
 
 When the batch is complete:
 - Show what was implemented
@@ -42,14 +52,14 @@ When the batch is complete:
 - State: "Batch complete. Ready for feedback."
 - Wait for human response
 
-### Step 5: Continue
+### Step 6: Continue
 
 Based on feedback:
 - Apply requested changes
 - Execute the next batch
 - Repeat until all tasks complete
 
-### Step 6: Complete Development
+### Step 7: Complete Development
 
 Announce: "I'm using the finishing-a-development-branch skill to complete this work."
 Follow `teampowers:finishing-a-development-branch` to verify tests and present options.
