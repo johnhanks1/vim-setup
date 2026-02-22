@@ -8,6 +8,15 @@
 
 The core team (scout, dev, tester, reviewer, ci) handles general development work. But some tasks require domain-specific expertise. Ad hoc agents are created on-the-fly when a task's domain calls for specialized knowledge.
 
+## Who Can Create Ad Hoc Agents
+
+Any agent can spawn an ad hoc specialist — not just the lead. Common patterns:
+- **Lead** spawns an ad hoc agent when assigning a domain-heavy task
+- **Dev** spawns an ad hoc agent when they hit a domain they're unsure about mid-implementation
+- **Scout** spawns an ad hoc agent when exploration reveals a complex domain area
+
+If you spawn an ad hoc agent, inform the lead so they can track the team.
+
 ## When to Create an Ad Hoc Agent
 
 Create a domain-specific agent when the task involves:
@@ -29,8 +38,6 @@ Create a domain-specific agent when the task involves:
 | Frontend | UI Agent | Component architecture, accessibility, state management |
 
 ## How to Create
-
-When the team lead identifies a task requiring domain expertise:
 
 ### Step 1: Define the Specialization
 
@@ -69,13 +76,36 @@ The ad hoc agent slots into the normal workflow:
 4. Reviewer reviews → should evaluate domain best practices
 5. CI runs pipeline → same as always
 
+## Communication
+
+Each message MUST include `TASK: {task_id}` so agents can track context.
+
+### Ad Hoc Agent Receives From
+
+| From | When | What |
+|------|------|------|
+| **Lead** or **spawning agent** | Task assignment | Domain task spec, constraints, deliverables |
+| **Scout** | Before implementation | Domain-relevant codebase context |
+
+### Ad Hoc Agent Sends To
+
+| To | When | What |
+|----|------|------|
+| **Dev** | Domain guidance needed | Schema design, API patterns, domain recommendations |
+| **Tester** | Implementation complete | Completion signal with worktree path (same format as dev) |
+| **Lead** | Blocked or done | Blocker descriptions, completion status |
+
+### Worktree Isolation
+
+If the ad hoc agent writes code, use `isolation: worktree` — same as a dev agent. If advisory only (no file writes), share the main worktree.
+
 ## Rules
 
 - Ad hoc agents follow all the same rules as dev agents (TDD, scope, reporting)
 - They ADD domain expertise on top of the standard dev workflow
 - They don't replace the core team — they work alongside it
-- The team lead decides when an ad hoc agent is needed
 - One ad hoc agent per domain — don't create overlapping specialists
+- Any agent can spawn them, but inform the lead
 
 ## Anti-Patterns
 

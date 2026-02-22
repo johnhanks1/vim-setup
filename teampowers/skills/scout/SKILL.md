@@ -18,6 +18,7 @@ The scout is the first agent activated on any non-trivial task. Before anyone wr
 - When the team needs to understand an unfamiliar part of the codebase
 - When requirements are vague and codebase context is needed to clarify them
 - Before the dev agent starts implementation
+- When spawned by a dev agent that needs context on an unfamiliar area
 
 ## Process
 
@@ -33,40 +34,41 @@ The scout is the first agent activated on any non-trivial task. Before anyone wr
 - Find related code that follows patterns we should match
 - Note any tech debt, TODOs, or known issues in the area
 
-### Step 3: Report — Direct to Consumers
+### Step 3: Report Directly to Consumers
 
-Send context reports directly to the agents who need them (see `teampowers:communication-mesh`):
-
-- **Scout → Dev(s)**: Send each dev the context relevant to their task area
-- **Scout → Ad Hoc agent(s)**: Send domain-relevant context to specialists
-- **Scout → Lead**: Send the full report so lead can adjust assignments
+Send context reports directly to the agents who need them — don't route through the lead.
 
 ```
-## Codebase Context Report
-
-### Architecture
-- How the relevant area is structured
-- Key abstractions and patterns in use
-
-### Relevant Files
-- Files that will likely need modification
-- Files that contain patterns we should follow
-- Test files and test patterns
-
-### Dependencies
-- Internal dependencies (what depends on what we're changing)
-- External dependencies (libraries, APIs)
-
-### Risks
-- Areas of complexity
-- Fragile code or insufficient test coverage
-- Potential side effects of changes
-
-### Recommendations
-- Suggested approach based on existing patterns
-- Files to own per task (for parallel dev agents)
-- Things to watch out for
+CONTEXT FOR: {task_id}
+ARCHITECTURE: {how this area is structured}
+PATTERNS: {conventions to follow}
+KEY_FILES: {important files and what they do}
+RISKS: {things to watch out for}
+DEPENDENCIES: {what depends on what}
 ```
+
+## Communication
+
+Each message MUST include `TASK: {task_id}` so agents can track context.
+
+### You Receive From
+
+| From | When | What |
+|------|------|------|
+| **Lead** | New batch starts | Areas to explore, questions to answer |
+| **Dev** | Dev needs context | Specific area to explore (when spawned by dev) |
+
+### You Send To
+
+| To | When | What |
+|----|------|------|
+| **Dev(s)** | Exploration complete | Context relevant to each dev's task area |
+| **Ad Hoc** | Domain patterns found | Domain-relevant codebase context for specialists |
+| **Lead** | Exploration complete | Full report so lead can adjust task assignments |
+
+### Spawning Agents
+
+Scouts can spawn sub-scouts to parallelize exploration of large codebases. Inform the lead when you do this.
 
 ## Scaling
 

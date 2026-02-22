@@ -1,14 +1,14 @@
-# Communication Mesh
+# Communication Mesh — Architectural Overview
 
 ## Metadata
 - **Name**: communication-mesh
-- **Description**: Defines how every agent communicates with every other agent — a mesh network, not hub-and-spoke
+- **Description**: Architectural overview of how agents communicate — each agent's specific paths are in its own skill file
 
 ## Overview
 
-Teampowers agents communicate in a mesh network. Agents talk directly to each other via `SendMessage` rather than routing everything through the lead. The lead coordinates but doesn't bottleneck.
+Teampowers agents communicate in a mesh network. Agents talk directly to each other rather than routing everything through the lead. The lead coordinates but doesn't bottleneck.
 
-**Core principle**: Direct agent-to-agent communication for speed. The lead orchestrates, it doesn't relay.
+**This is a reference document.** Each agent's specific communication paths (who they receive from, who they send to, and message formats) are defined in that agent's own skill file. You do NOT need to load this document to know how to communicate — check your own skill file.
 
 ## Team Topology
 
@@ -23,26 +23,39 @@ Teampowers agents communicate in a mesh network. Agents talk directly to each ot
 - **Reviewer** — single source of truth for code quality
 - **CI** — single source of truth for pipeline status
 
-## Worktree Awareness
+## Agent Spawning
 
-With native worktree isolation, dev agents each work in their own worktree (`<repo>/.claude/worktrees/dev-{task_id}/`). This affects communication:
-- **Scouts** explore the main worktree and send context to devs (who are in separate worktrees)
-- **Devs** commit to their worktree branch; completion signals include the worktree branch name
-- **Tester/Reviewer/CI** work in the main worktree and test against merged results
-- **Lead** coordinates merges of worktree branches into the feature branch between batches
+Any agent can spawn subagents — not just the lead:
+- **Lead** spawns the initial team
+- **Dev** can spawn scouts or ad-hoc specialists mid-implementation
+- **Scout** can spawn sub-scouts to parallelize exploration
 
-## The Mesh
+Rule: inform the lead when you spawn an agent.
 
-### Communication Map
+## The Flow
 
-Every arrow is a `SendMessage`. Agents communicate directly — no relay through lead unless coordination is needed.
+All verification happens in the dev's worktree before merge:
+
+```
+Lead assigns → Scout explores → Scout sends context to Dev
+
+Dev implements (in worktree)
+  → Tester validates (in dev's worktree)
+  → Reviewer reviews (in dev's worktree)
+  → CI runs pipeline (in dev's worktree)
+  → CI signals Lead: ready to merge
+
+Lead merges worktree branch → CI runs integration check on merged branch
+```
+
+## Communication Map
 
 ```
                     ┌──────────┐
                     │   Lead   │
                     │(coord.)  │
                     └────┬─────┘
-                         │ assigns tasks, resolves conflicts
+                         │ assigns tasks, merges worktrees
             ┌────────────┼────────────┐
             ▼            ▼            ▼
        ┌─────────┐ ┌─────────┐ ┌──────────┐
@@ -52,176 +65,45 @@ Every arrow is a `SendMessage`. Agents communicate directly — no relay through
             ▼            ▼           ▼
        ┌─────────┐ ┌─────────┐      │ domain guidance
        │  Dev 1  │ │  Dev 2  │◄─────┘
+       │(wt-1)   │ │(wt-2)   │
        └────┬────┘ └────┬────┘
-            │            │
-            ▼            ▼       direct handoffs
-       ┌──────────────────────┐
-       │       Tester         │
-       └──────────┬───────────┘
-                  │
-                  ▼
-       ┌──────────────────────┐
-       │      Reviewer        │
-       └──────────┬───────────┘
-                  │
-                  ▼
-       ┌──────────────────────┐
-       │         CI           │
-       └──────────┬───────────┘
-                  │
-                  ▼
-              task done → Lead notified
-```
-
-### Direct Communication Paths
-
-#### Scout → Dev
-**When**: Scout finishes exploring a code area relevant to a dev's task
-**Message**: Codebase context report (architecture, patterns, file ownership, risks)
-**Why direct**: Dev needs this context immediately to start work — no need for lead to relay
-
-#### Dev → Tester
-**When**: Dev finishes implementation
-**Message**: Completion report (what was built, changed files, test results)
-**Why direct**: Tester needs to validate immediately — waiting for lead adds latency
-
-#### Tester → Dev
-**When**: Tests fail or edge cases reveal issues
-**Message**: Failure report (which tests, why they fail, what needs fixing)
-**Why direct**: Dev needs to fix immediately — this is a tight feedback loop
-
-#### Dev → Reviewer
-**When**: Dev's implementation passes tester validation
-**Message**: Review request (what was built, spec, changed files, base/head SHA)
-**Why direct**: Reviewer can start while other tasks are still in progress
-
-#### Reviewer → Dev
-**When**: Review finds issues that need fixing
-**Message**: Review findings (spec gaps, quality issues, specific file:line references)
-**Why direct**: Dev fixes and resubmits — tight loop between reviewer and dev
-
-#### Reviewer → CI
-**When**: Review passes (both spec and quality stages)
-**Message**: Approval signal with commit range to verify
-**Why direct**: CI can start running without waiting for lead to relay
-
-#### CI → Lead
-**When**: Pipeline completes (pass or fail)
-**Message**: CI report (all check results, pass/fail, details on failures)
-**Why to lead**: Lead needs to track overall task status and decide next actions
-
-#### CI → Dev (on failure)
-**When**: Pipeline fails
-**Message**: Failure details (which check, specific errors, file:line references)
-**Why direct**: Dev needs to fix — CI reports to both lead AND dev simultaneously
-
-#### Ad Hoc → Dev
-**When**: Ad hoc agent has domain-specific guidance for the dev
-**Message**: Domain recommendations (schema design, API patterns, etc.)
-**Why direct**: Domain expertise flows straight to the implementer
-
-#### Scout → Ad Hoc
-**When**: Scout discovers domain-specific patterns the ad hoc agent should know
-**Message**: Domain-relevant codebase context
-**Why direct**: Keeps ad hoc agent informed about existing patterns in their domain
-
-### Lead Communication (Coordination Only)
-
-The lead sends messages for coordination purposes only:
-
-#### Lead → Scout
-**When**: New task batch starts, need codebase exploration
-**Message**: Areas to explore, questions to answer
-
-#### Lead → Dev
-**When**: Assigning tasks, resolving file ownership conflicts
-**Message**: Task assignments, conflict resolution instructions
-
-#### Lead → Any Agent
-**When**: Batch boundary (human feedback changes direction)
-**Message**: Updated instructions, priority changes, stop signals
-
-#### Any Agent → Lead
-**When**: Blocked, need file outside ownership, conflicting information
-**Message**: Blocker description, resolution request
-
-## Message Formats
-
-### Task Assignment (Lead → Dev/Scout)
-```
-TASK: {task_id}
-DESCRIPTION: {what needs to be done}
-OWNED_FILES: {files this agent may modify}
-READ_ONLY: {files to read but not touch}
-ACCEPTANCE: {criteria for completion}
-CONTEXT_FROM: {which scout/ad-hoc to expect context from}
-REPORT_TO: {who to message when done — usually tester}
-```
-
-### Context Handoff (Scout → Dev)
-```
-CONTEXT FOR: {task_id}
-ARCHITECTURE: {how this area is structured}
-PATTERNS: {conventions to follow}
-KEY_FILES: {important files and what they do}
-RISKS: {things to watch out for}
-DEPENDENCIES: {what depends on what}
-```
-
-### Completion Signal (Dev → Tester)
-```
-TASK: {task_id}
-STATUS: implementation complete
-WORKTREE: {worktree path, e.g. .claude/worktrees/dev-task-3/}
-WORKTREE_BRANCH: {branch name, e.g. worktree-dev-task-3}
-CHANGED_FILES: {list}
-SUMMARY: {what was built}
-TESTS_RUN: {results}
-CONCERNS: {anything uncertain}
-```
-
-### Review Request (Dev → Reviewer)
-```
-TASK: {task_id}
-SPEC: {original requirements}
-IMPLEMENTATION: {summary of what was built}
-BASE_SHA: {commit before changes}
-HEAD_SHA: {commit after changes}
-TESTER_VALIDATION: {tester's report}
-```
-
-### Pipeline Request (Reviewer → CI)
-```
-TASK: {task_id}
-STATUS: review approved
-COMMIT_RANGE: {base_sha}..{head_sha}
-CHECKS: run all
-```
-
-### Merge Request (CI → Lead, after task passes all checks)
-```
-TASK: {task_id}
-STATUS: ready to merge
-WORKTREE_BRANCH: {branch name}
-CI_STATUS: all checks passed
-MERGE_INTO: {feature branch name}
-```
-
-### Failure Feedback (Tester/Reviewer/CI → Dev)
-```
-TASK: {task_id}
-STATUS: {test_failure | review_rejection | ci_failure}
-ISSUES:
-- {file:line — description of issue}
-- {file:line — description of issue}
-ACTION_NEEDED: {what dev should fix}
+            │            │          all verification in
+            ▼            ▼          dev's worktree
+       ┌────────┐  ┌────────┐
+       │ Tester │  │ Tester │      (same tester, different worktrees)
+       └───┬────┘  └───┬────┘
+           ▼            ▼
+       ┌────────┐  ┌────────┐
+       │Reviewer│  │Reviewer│      (same reviewer, different worktrees)
+       └───┬────┘  └───┬────┘
+           ▼            ▼
+       ┌────────┐  ┌────────┐
+       │  CI    │  │  CI    │      (same CI, different worktrees)
+       └───┬────┘  └───┬────┘
+           │            │
+           ▼            ▼
+       ready to merge → Lead
 ```
 
 ## Rules
 
 - **Agents message each other directly** — lead doesn't relay
-- **Lead coordinates, doesn't implement** — task assignment, conflict resolution, human reporting
-- **Every message includes task_id** — so agents can track context across the mesh
+- **Every message includes task_id** — so agents can track context
+- **Verification happens in dev worktrees** — tester, reviewer, CI visit the dev's worktree before merge
 - **Failures go to dev AND lead** — dev fixes, lead tracks status
-- **Completion signals chain forward** — dev → tester → reviewer → ci → lead
-- **Scouts and ad hocs feed context sideways** — directly to the agents who need it
+- **Any agent can spawn subagents** — inform lead when you do
+
+## Per-Agent Communication Details
+
+Each agent's skill file contains its own:
+- **"You Receive From"** table — who sends messages to this agent and when
+- **"You Send To"** table — who this agent messages and when
+- **Message formats** — the specific formats for each message type
+
+See:
+- `teampowers:dev` — Dev agent communication
+- `teampowers:scout` — Scout agent communication
+- `teampowers:tester` — Tester agent communication
+- `teampowers:reviewer` — Reviewer agent communication
+- `teampowers:ci` — CI agent communication
+- `teampowers:ad-hoc-agents` — Ad hoc agent communication
