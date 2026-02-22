@@ -18,7 +18,7 @@ The scout is the first agent activated on any non-trivial task. Before anyone wr
 - When the team needs to understand an unfamiliar part of the codebase
 - When requirements are vague and codebase context is needed to clarify them
 - Before the dev agent starts implementation
-- When spawned by a dev agent that needs context on an unfamiliar area
+- When the lead spawns you because a dev requested codebase context
 
 ## Process
 
@@ -56,7 +56,7 @@ Each message MUST include `TASK: {task_id}` so agents can track context.
 | From | When | What |
 |------|------|------|
 | **Lead** | New batch starts | Areas to explore, questions to answer |
-| **Dev** | Dev needs context | Specific area to explore (when spawned by dev) |
+| **Dev** (via lead) | Dev needs context | Lead spawns a scout when a dev requests one |
 
 ### You Send To
 
@@ -66,14 +66,20 @@ Each message MUST include `TASK: {task_id}` so agents can track context.
 | **Ad Hoc** | Domain patterns found | Domain-relevant codebase context for specialists |
 | **Lead** | Exploration complete | Full report so lead can adjust task assignments |
 
-### Spawning Agents
+### Requesting Help
 
-Scouts can spawn sub-scouts to parallelize exploration of large codebases. Inform the lead when you do this.
+In agent teams, only the lead can spawn teammates. If a codebase is too large to explore alone, message the lead to request additional scouts:
+
+```
+REQUEST: need additional scout
+REASON: {codebase area is too large for one scout}
+SUGGESTED_SPLIT: {how to divide the exploration}
+```
 
 ## Scaling
 
 - **Small jobs** (1-3 tasks in one area): 1 scout covers everything
-- **Large jobs** (many tasks across subsystems): spin up 1 scout per subsystem area
+- **Large jobs** (many tasks across subsystems): lead spawns 1 scout per subsystem area
 - Each scout sends context directly to the devs working in their area — no relay through lead
 
 ## Key Principles

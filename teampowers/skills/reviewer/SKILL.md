@@ -109,9 +109,9 @@ COMMIT_RANGE: {base_sha}..{head_sha}
 CHECKS: run all
 ```
 
-### Spawning Agents
+### Requesting Help
 
-You can spawn subagents if needed — e.g., a scout to verify how a pattern is used elsewhere in the codebase.
+In agent teams, only the lead can spawn teammates. If you need help (e.g., a scout to verify how a pattern is used elsewhere in the codebase), message the lead to request one.
 
 ## Key Principles
 

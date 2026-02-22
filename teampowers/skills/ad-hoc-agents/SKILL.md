@@ -8,14 +8,12 @@
 
 The core team (scout, dev, tester, reviewer, ci) handles general development work. But some tasks require domain-specific expertise. Ad hoc agents are created on-the-fly when a task's domain calls for specialized knowledge.
 
-## Who Can Create Ad Hoc Agents
+## Who Creates Ad Hoc Agents
 
-Any agent can spawn an ad hoc specialist — not just the lead. Common patterns:
-- **Lead** spawns an ad hoc agent when assigning a domain-heavy task
-- **Dev** spawns an ad hoc agent when they hit a domain they're unsure about mid-implementation
-- **Scout** spawns an ad hoc agent when exploration reveals a complex domain area
-
-If you spawn an ad hoc agent, inform the lead so they can track the team.
+In agent teams, **only the lead spawns teammates** — including ad hoc agents. Other agents request them:
+- **Dev** messages lead when they hit a domain they're unsure about mid-implementation
+- **Scout** messages lead when exploration reveals a complex domain area
+- **Lead** spawns the ad hoc agent as a teammate with the domain specialization baked in
 
 ## When to Create an Ad Hoc Agent
 
@@ -59,9 +57,9 @@ Create a domain-specific agent when the task involves:
 - {What this agent produces}
 ```
 
-### Step 2: Send via TeamCreate or SendMessage
+### Step 2: Lead Spawns the Teammate
 
-Create the ad hoc agent as a teammate with the specialization baked into their prompt. They receive:
+The lead creates the ad hoc agent as a teammate with the specialization baked into their prompt. They receive:
 - The domain expertise definition above
 - The specific task assignment
 - The scout's context report (filtered to relevant parts)
@@ -84,7 +82,7 @@ Each message MUST include `TASK: {task_id}` so agents can track context.
 
 | From | When | What |
 |------|------|------|
-| **Lead** or **spawning agent** | Task assignment | Domain task spec, constraints, deliverables |
+| **Lead** | Task assignment | Domain task spec, constraints, deliverables |
 | **Scout** | Before implementation | Domain-relevant codebase context |
 
 ### Ad Hoc Agent Sends To
@@ -105,7 +103,7 @@ If the ad hoc agent writes code, use `isolation: worktree` — same as a dev age
 - They ADD domain expertise on top of the standard dev workflow
 - They don't replace the core team — they work alongside it
 - One ad hoc agent per domain — don't create overlapping specialists
-- Any agent can spawn them, but inform the lead
+- Only the lead spawns ad hoc agents — other agents request them via message
 
 ## Anti-Patterns
 

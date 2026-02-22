@@ -115,9 +115,9 @@ Each message MUST include `TASK: {task_id}` so agents can track context.
 | **Dev** | Tests pass | Validation report (dev forwards to reviewer) |
 | **Lead** | Blocked or confused | Blocker description |
 
-### Spawning Agents
+### Requesting Help
 
-You can spawn subagents if needed — e.g., a scout to explore test patterns in an unfamiliar area.
+In agent teams, only the lead can spawn teammates. If you need help (e.g., a scout to explore test patterns in an unfamiliar area), message the lead to request one.
 
 ## Key Principles
 

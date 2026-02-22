@@ -31,13 +31,21 @@ Announce: "I'm using the team-driven-development skill to execute this plan with
 
 ## Agent Spawning
 
-**Any agent can spawn subagents** — not just the lead. Common patterns:
-- Lead spawns the initial team (scouts, devs, tester, reviewer, CI)
-- Dev spawns a scout to explore an unfamiliar area mid-implementation
-- Dev spawns an ad-hoc specialist for domain guidance
-- Scout spawns sub-scouts to parallelize exploration
+**Only the lead spawns teammates.** This is an agent teams constraint — teammates cannot create other teammates.
 
-**Rule**: If you spawn an agent, inform the lead so they can track the team.
+The lead spawns:
+- The initial team (scouts, devs, tester, reviewer, CI)
+- Additional scouts when a dev or scout requests one
+- Ad-hoc specialists when a dev needs domain expertise
+- Additional devs if the workload changes
+
+**Other agents request new teammates by messaging the lead:**
+```
+TASK: {task_id}
+REQUEST: need teammate
+TYPE: scout / dev / ad-hoc ({domain})
+REASON: {why}
+```
 
 ## Communication: Direct, Not Relayed
 
@@ -155,7 +163,7 @@ After all tasks:
 - **Verify before merge** — tester, reviewer, CI all work in dev's worktree first
 - **Lead never implements** — coordination and merging only
 - **Agents communicate directly** — each agent knows its own communication paths
-- **Any agent can spawn subagents** — inform lead when you do
+- **Only the lead spawns teammates** — others request via message
 - **Never skip the scout phase** — context before code
 - **Never skip verification** — every task goes through tester → reviewer → CI in worktree
 - **Never dispatch dependent tasks in parallel** — respect the dependency graph

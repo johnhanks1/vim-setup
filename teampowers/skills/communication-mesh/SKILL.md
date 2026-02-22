@@ -25,12 +25,10 @@ Teampowers agents communicate in a mesh network. Agents talk directly to each ot
 
 ## Agent Spawning
 
-Any agent can spawn subagents — not just the lead:
-- **Lead** spawns the initial team
-- **Dev** can spawn scouts or ad-hoc specialists mid-implementation
-- **Scout** can spawn sub-scouts to parallelize exploration
-
-Rule: inform the lead when you spawn an agent.
+**Only the lead spawns teammates** — this is an agent teams constraint. Other agents request new teammates by messaging the lead:
+- **Dev** messages lead to request a scout or ad-hoc specialist
+- **Scout** messages lead to request additional scouts for large codebases
+- **Lead** spawns the requested teammate
 
 ## The Flow
 
@@ -91,7 +89,7 @@ Lead merges worktree branch → CI runs integration check on merged branch
 - **Every message includes task_id** — so agents can track context
 - **Verification happens in dev worktrees** — tester, reviewer, CI visit the dev's worktree before merge
 - **Failures go to dev AND lead** — dev fixes, lead tracks status
-- **Any agent can spawn subagents** — inform lead when you do
+- **Only the lead spawns teammates** — others request via message
 
 ## Per-Agent Communication Details
 

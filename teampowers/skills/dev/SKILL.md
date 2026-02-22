@@ -105,13 +105,19 @@ HEAD_SHA: {commit after changes}
 TESTER_VALIDATION: {tester's report}
 ```
 
-### Spawning Agents
+### Requesting New Teammates
 
-You can spawn subagents if needed — you're not limited to waiting for the lead. Examples:
-- Spawn a scout to explore an unfamiliar area of the codebase
-- Spawn an ad-hoc specialist for domain guidance (SQL, API design, etc.)
+In agent teams, only the lead can spawn teammates. If you need help:
+- **Need codebase context?** Message the lead to request a scout for the area you're stuck on
+- **Need domain expertise?** Message the lead to request an ad-hoc specialist (SQL, API design, etc.)
 
-If you spawn an agent, inform the lead so they can track the team.
+```
+TASK: {task_id}
+REQUEST: need teammate
+TYPE: scout / ad-hoc ({domain})
+REASON: {why you need help}
+AREA: {what part of the codebase or domain}
+```
 
 ## Scaling
 
