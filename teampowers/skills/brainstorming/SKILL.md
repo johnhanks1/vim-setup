@@ -1,3 +1,8 @@
+---
+name: brainstorming
+description: Structured brainstorming before implementation — refine ideas, explore alternatives, validate design
+---
+
 # Brainstorming
 
 ## Metadata

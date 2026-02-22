@@ -1,3 +1,8 @@
+---
+name: scout
+description: Reconnaissance agent that explores the codebase, maps architecture, and gathers context before development begins
+---
+
 # Scout Agent
 
 ## Metadata

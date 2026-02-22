@@ -1,3 +1,8 @@
+---
+name: finishing-a-development-branch
+description: Complete a development branch with final verification and cleanup
+---
+
 # Finishing a Development Branch
 
 ## Metadata

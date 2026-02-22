@@ -1,3 +1,8 @@
+---
+name: writing-plans
+description: Create structured implementation plans that can be executed by teams or sequentially
+---
+
 # Writing Plans
 
 ## Metadata

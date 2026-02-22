@@ -1,3 +1,8 @@
+---
+name: using-git-worktrees
+description: Use Claude Code's native worktree support to give each agent an isolated working directory
+---
+
 # Using Git Worktrees
 
 ## Metadata

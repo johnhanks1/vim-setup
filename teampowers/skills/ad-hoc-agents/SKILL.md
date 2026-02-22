@@ -1,3 +1,8 @@
+---
+name: ad-hoc-agents
+description: Dynamically create specialized agents based on task domain requirements
+---
+
 # Ad Hoc Agents
 
 ## Metadata
