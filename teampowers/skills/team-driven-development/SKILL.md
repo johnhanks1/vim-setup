@@ -1,3 +1,8 @@
+---
+name: team-driven-development
+description: Orchestrate a team of specialized agents — verify in dev worktrees before merge, agents communicate directly
+---
+
 # Team-Driven Development
 
 ## Metadata

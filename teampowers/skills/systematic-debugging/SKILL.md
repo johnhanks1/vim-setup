@@ -1,3 +1,8 @@
+---
+name: systematic-debugging
+description: Methodical approach to diagnosing and fixing bugs — no guessing
+---
+
 # Systematic Debugging
 
 ## Metadata

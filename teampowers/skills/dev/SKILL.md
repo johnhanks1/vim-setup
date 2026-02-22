@@ -1,3 +1,8 @@
+---
+name: dev
+description: Implementation agent that writes production code based on task specs, guided by scout context and TDD
+---
+
 # Dev Agent
 
 ## Metadata

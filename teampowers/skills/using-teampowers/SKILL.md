@@ -1,3 +1,8 @@
+---
+name: using-teampowers
+description: Entry point — how teampowers works, the team roster, and when to activate each skill
+---
+
 # Using Teampowers
 
 ## Metadata

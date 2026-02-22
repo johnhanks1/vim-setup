@@ -1,3 +1,8 @@
+---
+name: reviewer
+description: Two-stage code review agent — spec compliance first, then code quality — reviews in the dev's worktree before merge
+---
+
 # Reviewer Agent
 
 ## Metadata

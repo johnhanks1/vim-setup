@@ -1,3 +1,8 @@
+---
+name: writing-skills
+description: How to create new teampowers skills
+---
+
 # Writing Skills
 
 ## Metadata
@@ -11,6 +16,19 @@ Skills are markdown files in `skills/{skill-name}/SKILL.md` that teach Claude Co
 ## Skill Structure
 
 Every skill needs:
+
+### 0. YAML Frontmatter (Required)
+
+The file MUST start with YAML frontmatter — this is how Claude Code discovers and registers skills:
+
+```markdown
+---
+name: skill-name
+description: One-line description of what this skill does
+---
+```
+
+Without frontmatter, the skill won't be discovered by the plugin system.
 
 ### 1. Metadata
 ```markdown
@@ -45,6 +63,7 @@ Which other teampowers skills this one connects to.
 ## Adding a New Skill
 
 1. Create `skills/{skill-name}/SKILL.md`
-2. Follow the structure above
-3. Add integration references to related skills
-4. Test the skill by using it in a real workflow
+2. Add YAML frontmatter with `name` and `description` (required for plugin discovery)
+3. Follow the structure above
+4. Add integration references to related skills
+5. Test the skill by using it in a real workflow

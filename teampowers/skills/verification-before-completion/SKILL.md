@@ -1,3 +1,8 @@
+---
+name: verification-before-completion
+description: Verify all work before marking anything as complete
+---
+
 # Verification Before Completion
 
 ## Metadata

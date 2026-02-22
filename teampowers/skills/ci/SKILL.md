@@ -1,3 +1,8 @@
+---
+name: ci
+description: Continuous integration agent that runs builds, tests, linting, and type checking — first in dev worktrees, then on the merged feature branch
+---
+
 # CI Agent
 
 ## Metadata

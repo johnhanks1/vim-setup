@@ -1,3 +1,8 @@
+---
+name: communication-mesh
+description: Architectural overview of how agents communicate — each agent's specific paths are in its own skill file
+---
+
 # Communication Mesh — Architectural Overview
 
 ## Metadata

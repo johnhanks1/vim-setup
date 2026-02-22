@@ -1,3 +1,8 @@
+---
+name: executing-plans
+description: Execute an implementation plan with batch execution, team pipeline, and human review checkpoints
+---
+
 # Executing Plans
 
 ## Metadata

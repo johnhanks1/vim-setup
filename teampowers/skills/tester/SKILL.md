@@ -1,3 +1,8 @@
+---
+name: tester
+description: Test-first agent that writes failing tests before implementation and validates behavior after — in the dev's worktree
+---
+
 # Tester Agent
 
 ## Metadata
